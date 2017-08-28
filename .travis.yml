@@ -1,9 +1,13 @@
 language: php
+
+sudo: false
+
 php:
   - 7.0
   - 7.1
   - 7.2
 
 script:
+  - composer install
   - php vendor/bin/phpcs --standard=./test/codesniffer.xml --encoding=utf-8 --extensions=php -p -s lib
   - php vendor/bin/phpunit -c test/phpunit.xml
