@@ -8,6 +8,6 @@ php:
   - 7.2
 
 script:
-  - composer install
+  - composer update
   - php vendor/bin/phpcs --standard=./test/codesniffer.xml --encoding=utf-8 --extensions=php -p -s lib
   - php vendor/bin/phpunit -c test/phpunit.xml
