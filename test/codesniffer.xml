@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<ruleset name="Danack">
+    <description>Customised coding standard.</description>
+    <arg name="tab-width" value="4"/>
+
+    <!-- This is a stub file and deliberately not CS compliant -->
+    <!--<exclude-pattern>*doc/Imagick.php</exclude-pattern>-->
+
+    <!-- This is not really our code -->
+    <!--<exclude-pattern>*birke/rememberme*</exclude-pattern>-->
+
+    <!-- This file has invalid syntax, so can't be parsed.-->
+    <!--<exclude-pattern>*Dijon/ErrorController/CompileError.php</exclude-pattern>-->
+
+    <!--<exclude-pattern>*migrations*</exclude-pattern>-->
+    <!--<exclude-pattern>*seeds*</exclude-pattern>-->
+
+
+    <rule ref="PSR2">
+        <!-- Need to find a way to turn this off for text, before re-enabling -->
+        <!--<exclude name="Generic.Files.LineLength.TooLong"/>-->
+
+        <!-- I just don't agree with these. -->
+        <exclude name="PSR2.ControlStructures.ElseIfDeclaration"/>
+        <exclude name="Squiz.ControlStructures.ElseIfDeclaration"/>
+        <!--<exclude name="Squiz.WhiteSpace.ScopeClosingBrace"/>-->
+
+        <!-- TODO make this be newline -->
+        <!--<exclude name="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace"/>-->
+
+        <!-- This makes co-ordinate pairs hard to read -->
+        <!--<exclude name="PSR2.Methods.FunctionCallSignature.MultipleArguments" />-->
+
+        <!-- These sniffs break 'valid' code -->
+        <!--<exclude name="PSR2.ControlStructures.SwitchDeclaration.BreakIndent"/>-->
+        <!--<exclude name="PSR2.ControlStructures.SwitchDeclaration.WrongOpenercase"/>-->
+        <!--<exclude name="PSR2.ControlStructures.SwitchDeclaration.WrongOpenerdefault"/>-->
+    </rule>
+
+    <!-- <rule ref="Yoast.ControlStructures.WpseoIfElseDeclaration" />
+    <rule ref="Yoast_Sniffs_ControlStructures_IfElseDeclarationSniff" /> -->
+    <rule ref="../vendor/yoast/yoastcs/Yoast/Sniffs/ControlStructures/IfElseDeclarationSniff.php"/>
+
+
+    <!-- We are doing tricksy stuff with namespaces -->
+
+    <!--<rule ref="PSR2.Classes.ClassDeclaration.SpaceBeforeBrace">-->
+        <!--<exclude-pattern>*bootstrap.php</exclude-pattern>-->
+        <!--<exclude-pattern>*Tutorial/functions.php</exclude-pattern>-->
+    <!--</rule>-->
+
+    <!--<rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">-->
+        <!--<exclude-pattern>*bootstrap.php</exclude-pattern>-->
+        <!--<exclude-pattern>*Tutorial/functions.php</exclude-pattern>-->
+    <!--</rule>-->
+
+    <!--<rule ref="PSR1.Classes.ClassDeclaration.MultipleClasses">-->
+        <!--<exclude-pattern>*bootstrap.php</exclude-pattern>-->
+        <!--<exclude-pattern>*/functions.php</exclude-pattern>-->
+    <!--</rule>-->
+
+    <!-- This is not a good practice for graphics functions -->
+    <!--<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.OneParamPerLine">-->
+        <!--<exclude-pattern>*/functions.php</exclude-pattern>-->
+    <!--</rule>-->
+
+    <!--&lt;!&ndash; We use lowercase names to avoid having to have huge data blocks &ndash;&gt;-->
+    <!--<rule ref="Squiz.Classes.ValidClassName.NotCamelCaps">-->
+        <!--<exclude-pattern>Imagick/*</exclude-pattern>-->
+        <!--<exclude-pattern>ImagickDraw/*</exclude-pattern>-->
+        <!--<exclude-pattern>ImagickKernel/*</exclude-pattern>-->
+        <!--<exclude-pattern>ImagickPixel/*</exclude-pattern>-->
+        <!--<exclude-pattern>ImagickPixelIterator/*</exclude-pattern>-->
+        <!--<exclude-pattern>Tutorial/*</exclude-pattern>-->
+    <!--</rule>-->
+
+    <!-- These are there own end point and so are okay to mix declaration and calling -->
+    <!--<rule ref="PSR1.Files.SideEffects.FoundWithSymbols">-->
+        <!--<exclude-pattern>Tutorial/smoothSpiderGraph.php</exclude-pattern>-->
+        <!--<exclude-pattern>lib/index.php</exclude-pattern>-->
+    <!--</rule>-->
+
+</ruleset>
