@@ -31,6 +31,12 @@ class HtmlResponse implements Response
             'Content-Type' => 'text/html'
         ];
 
+        // TODO - we could lock down the javascript and other resources that can be run on
+        // a site, via a CSP header, like one of the following.
+
+        // Content-Security-Policy: script-src 'unsafe-inline';report-uri /my_amazing_csp_report_parser;
+        // Content-Security-Policy-Report-Only: default-src 'self'; ...; report-uri /my_amazing_csp_report_parser;
+
         $this->headers = array_merge($standardHeaders, $headers);
         $this->body = $html;
     }

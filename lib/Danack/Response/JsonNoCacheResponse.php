@@ -4,15 +4,17 @@ namespace Danack\Response;
 
 use Danack\Response\Response;
 
-class DataNoCacheResponse implements Response
+class JsonNoCacheResponse implements Response
 {
+    private $statusCode;
+
     private $body;
 
     private $headers = [];
 
     public function getStatus()
     {
-        return 200;
+        return $this->statusCode;
     }
 
     public function getHeaders()
@@ -21,14 +23,13 @@ class DataNoCacheResponse implements Response
     }
 
     /**
-     * JsonResponse constructor.
+     * DataNoCacheResponse constructor.
      * @param $data
      * @param array $headers
+     * @throws InvalidDataException
      */
-    public function __construct($data, array $headers = [])
+    public function __construct($data, array $headers = [], int $statusCode = 200)
     {
-        $this->data = $data;
-
         $standardHeaders = [
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache, no-store',
@@ -36,6 +37,17 @@ class DataNoCacheResponse implements Response
 
         $this->headers = array_merge($standardHeaders, $headers);
         $this->body = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
+        $this->statusCode = $statusCode;
+
+        if ($this->body === false) {
+            $message = sprintf(
+                "Failed to convert array to JSON with error %s:%s",
+                json_last_error(),
+                json_last_error_msg()
+            );
+
+            throw new InvalidDataException($message);
+        }
     }
 
     public function getBody()
