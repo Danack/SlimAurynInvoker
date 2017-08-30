@@ -9,6 +9,22 @@ It replaces the built-in dispatcher that executes the callables for routes, and 
 
 It does not affect the dispatching of middlewares.
 
+## Quickstart
+
+If you install this library though Composer, all you need to do to link it into a Slim application is to set the 'foundHandler' when creating the Slim app.
+
+
+```
+<?php
+
+use Danack\SlimAurynInvoker\SlimAurynInvokerFactory;
+
+$container = new \Slim\Container;
+$container['foundHandler'] = new SlimAurynInvokerFactory($injector);
+$app = new \Slim\App($container);
+```
+
+There is an example app in the example directory
 
 ## Why you should use this library
 
