@@ -2,13 +2,29 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-class RedirectResponse implements Response
+class RedirectResponse implements StubResponse
 {
     private $headers = [];
 
     private $statusCode;
+
+    /**
+     * RedirectResponse constructor.
+     * @param string $uri
+     * @param int $statusCode
+     * @param array $headers
+     */
+    public function __construct(string $uri, int $statusCode = 302, array $headers = [])
+    {
+        $standardHeaders = [
+            'Location' => $uri
+        ];
+
+        $this->headers = array_merge($standardHeaders, $headers);
+        $this->statusCode = $statusCode;
+    }
 
     public function getStatus()
     {
@@ -18,22 +34,6 @@ class RedirectResponse implements Response
     public function getHeaders()
     {
         return $this->headers;
-    }
-
-    /**
-     * JsonResponse constructor.
-     * @param $data
-     * @param array $headers
-     */
-    public function __construct(string $uri, int $statusCode = 200, array $headers = [])
-    {
-        $standardHeaders = [
-            'location' => $uri
-        ];
-
-        $this->headers = array_merge($standardHeaders, $headers);
-
-        $this->statusCode = $statusCode;
     }
 
     public function getBody()

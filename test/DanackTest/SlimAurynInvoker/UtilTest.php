@@ -6,7 +6,7 @@ use Auryn\Injector;
 use Danack\SlimAurynInvoker\Util;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 use Danack\SlimAurynInvoker\RouteParams;
 use DanackTest\BaseTestCase;
 

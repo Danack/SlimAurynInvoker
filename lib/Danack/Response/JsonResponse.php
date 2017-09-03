@@ -2,10 +2,10 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 use Danack\Response\InvalidDataException;
 
-class JsonResponse implements Response
+class JsonResponse implements StubResponse
 {
     private $body;
 
@@ -27,6 +27,8 @@ class JsonResponse implements Response
      * JsonResponse constructor.
      * @param $data
      * @param array $headers
+     * @param int $statusCode
+     * @throws \Danack\Response\InvalidDataException
      */
     public function __construct($data, array $headers = [], int $statusCode = 200)
     {

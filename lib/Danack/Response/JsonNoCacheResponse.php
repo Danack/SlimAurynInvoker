@@ -2,9 +2,9 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-class JsonNoCacheResponse implements Response
+class JsonNoCacheResponse implements StubResponse
 {
     private $statusCode;
 

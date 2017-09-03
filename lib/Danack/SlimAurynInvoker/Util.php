@@ -3,12 +3,14 @@
 namespace Danack\SlimAurynInvoker;
 
 use Auryn\Injector;
+use Danack\Response\StubResponse;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Danack\Response\Response;
 
 /**
- * Class Util
+ * Helper function for the library
+ * This class only exists because we don't have function autoloading
+ * in PHP.
  */
 class Util
 {
@@ -35,22 +37,5 @@ class Util
 
         $routeParams = new RouteParams($routeArguments);
         $injector->share($routeParams);
-    }
-
-    /**
-     * @param Response $builtResponse
-     * @param ResponseInterface $response
-     * @return ResponseInterface
-     */
-    public static function processResponse(Response $builtResponse, ResponseInterface $response)
-    {
-        $response = $response->withStatus($builtResponse->getStatus());
-        foreach ($builtResponse->getHeaders() as $key => $value) {
-            /** @var $response \Psr\Http\Message\ResponseInterface */
-            $response = $response->withHeader($key, $value);
-        }
-        $response->getBody()->write($builtResponse->getBody());
-
-        return $response;
     }
 }

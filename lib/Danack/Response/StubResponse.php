@@ -2,7 +2,7 @@
 
 namespace Danack\Response;
 
-interface Response
+interface StubResponse
 {
     public function getStatus();
     public function getBody();

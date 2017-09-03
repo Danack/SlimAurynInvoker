@@ -2,30 +2,9 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-function str_putcsv($dataHeaders, $dataRows)
-{
-    # Generate CSV data from array
-    $fh = fopen('php://temp', 'rw'); # don't create a file, attempt
-    # to use memory instead
-
-    if ($dataHeaders !== null) {
-        fputcsv($fh, $dataHeaders);
-    }
-
-    foreach ($dataRows as $row) {
-        fputcsv($fh, $row);
-    }
-    rewind($fh);
-    $csv = stream_get_contents($fh);
-    fclose($fh);
-
-    return $csv;
-}
-
-
-class CsvDataResponse implements Response
+class CsvDataResponse implements StubResponse
 {
     private $headers = [];
 
@@ -33,6 +12,8 @@ class CsvDataResponse implements Response
 
     private $dataHeaders;
     private $dataRows;
+
+    private $body;
 
     public function getStatus()
     {
@@ -53,8 +34,8 @@ class CsvDataResponse implements Response
      * @param int $statusCode
      */
     public function __construct(
+        array $dataRows,
         array $dataHeaders = null,
-        $dataRows,
         $filename = "file.csv",
         array $headers = [],
         int $statusCode = 200
@@ -68,11 +49,38 @@ class CsvDataResponse implements Response
         $this->dataHeaders = $dataHeaders;
         $this->dataRows = $dataRows;
         $this->statusCode = $statusCode;
+
+        $this->body = self::strPutCsv($this->dataHeaders, $this->dataRows);
     }
 
     public function getBody()
     {
-        // TODO - convert to a streaming model when the data >= 1 megabyte.
-        return str_putcsv($this->dataHeaders, $this->dataRows);
+        return $this->body;
+    }
+
+    /**
+     * This is only a static method due to PHP not having function autoloading
+     * @param $dataHeaders
+     * @param $dataRows
+     * @return string
+     */
+    public static function strPutCsv($dataHeaders, $dataRows)
+    {
+        # Generate CSV data from array
+        $fh = fopen('php://temp', 'rw'); # don't create a file, attempt
+        # to use memory instead
+
+        if ($dataHeaders !== null) {
+            fputcsv($fh, $dataHeaders);
+        }
+
+        foreach ($dataRows as $row) {
+            fputcsv($fh, $row);
+        }
+        rewind($fh);
+        $csv = stream_get_contents($fh);
+        fclose($fh);
+
+        return $csv;
     }
 }

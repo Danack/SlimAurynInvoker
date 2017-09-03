@@ -28,8 +28,7 @@ There is an example app in the example directory
 
 ## Why you should use this library
 
-There are two main reasons to use Auryn as the tool that executes your controllers in your application; it allows you to use interface segregation for passing in parameters, as well   
-
+There are two main reasons to use Auryn as the tool that executes your controllers in your application; it allows you to use interface segregation for passing in parameters, as well allowing your controllers to return simple 'stub response' types, rather than having to touch the PSR 7 response object.
 
 
 ### Inteface segregation for parameters

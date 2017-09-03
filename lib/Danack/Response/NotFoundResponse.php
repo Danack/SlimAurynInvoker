@@ -3,9 +3,9 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-class NotFoundResponse implements Response
+class NotFoundResponse implements StubResponse
 {
     private $message;
 

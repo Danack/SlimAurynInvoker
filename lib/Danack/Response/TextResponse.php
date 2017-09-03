@@ -2,9 +2,9 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-class TextResponse implements Response
+class TextResponse implements StubResponse
 {
     private $body;
 

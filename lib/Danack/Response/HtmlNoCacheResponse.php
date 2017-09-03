@@ -2,9 +2,9 @@
 
 namespace Danack\Response;
 
-use Danack\Response\Response;
+use Danack\Response\StubResponse;
 
-class HtmlUncachableResponse implements Response
+class HtmlNoCacheResponse implements StubResponse
 {
     private $body;
 

@@ -3,13 +3,13 @@
 namespace DanackTest\SlimAurynInvoker;
 
 use Auryn\Injector;
-use Danack\SlimAurynInvoker\SlimAurynInvoker;
 use Danack\Response\TextResponse;
-use Psr\Http\Message\ServerRequestInterface;
-use Psr\Http\Message\ResponseInterface;
-use DanackTest\BaseTestCase;
-use Zend\Diactoros\Response;
+use Danack\SlimAurynInvoker\SlimAurynInvoker;
 use Danack\SlimAurynInvoker\SlimAurynInvokerException;
+use DanackTest\BaseTestCase;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
+use Zend\Diactoros\Response;
 
 class SlimAurynInvokerTest extends BaseTestCase
 {
@@ -88,20 +88,53 @@ class SlimAurynInvokerTest extends BaseTestCase
     }
 
     /**
-     * Test that a callable that does not return an expected type
+     * Test that a callable returns null unexpectedly
      * throws an exception.
      */
-    public function testBadCallable()
+    public function testBadCallableReturningNull()
     {
         $injector = new Injector();
         $invoker = new SlimAurynInvoker($injector);
 
         $callable = function () {};
-        $this->expectException(SlimAurynInvokerException::class);
+
 
         /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $response = new Response();
+
+        $this->expectException(SlimAurynInvokerException::class);
+        $this->expectExceptionMessage("returned [NULL]");
+        $invoker(
+            $callable,
+            $requestMock,
+            $response,
+            []
+        );
+    }
+
+
+    /**
+     * Test that a callable that returns an expected object type
+     * throws an exception.
+     */
+    public function testBadCallableReturningObject()
+    {
+        $injector = new Injector();
+        $invoker = new SlimAurynInvoker($injector);
+
+        $callable = function () {
+            return new \StdClass();
+        };
+
+
+        /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $response = new Response();
+
+
+        $this->expectException(SlimAurynInvokerException::class);
+        $this->expectExceptionMessage("object of type stdClass");
 
         $invoker(
             $callable,
@@ -109,5 +142,62 @@ class SlimAurynInvokerTest extends BaseTestCase
             $response,
             []
         );
+    }
+
+    /**
+     * Test that the correct mappers are used when the callable returns
+     * each of those types.
+     */
+    public function testMapperIsUsed()
+    {
+        $stringMapperUsed = false;
+        $stringToResponseMapper = function(string $value, ResponseInterface $response) use (&$stringMapperUsed) {
+            $response = $response->withStatus(420);
+            $stringMapperUsed = true;
+            return $response;
+        };
+
+        $stdClassMapperUsed = false;
+        $stdClassResponseMapper = function(\StdClass $stdClass, ResponseInterface $response) use (&$stdClassMapperUsed) {
+            $response = $response->withStatus(420);
+            $stdClassMapperUsed = true;
+            return $response;
+        };
+
+        $resultMappers = [
+            'string' => $stringToResponseMapper,
+            \StdClass::class => $stdClassResponseMapper,
+        ];
+
+
+        $injector = new Injector();
+        $invoker = new SlimAurynInvoker($injector, $resultMappers);
+
+        $returnsAString = function () {
+            return "This could be some html.";
+        };
+
+        $returnsAStdClass = function () {
+           return new \StdClass();
+        };
+
+        /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $response = new Response();
+        $response = $invoker->__invoke($returnsAString, $requestMock, $response, []);
+        self::assertTrue($stringMapperUsed);
+        self::assertFalse($stdClassMapperUsed);
+        self::assertInstanceOf(ResponseInterface::class, $response);
+
+
+        // reset to test StdClass mapper is used correct
+        $stringMapperUsed = false;
+        /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $response = new Response();
+        $response = $invoker->__invoke($returnsAStdClass, $requestMock, $response, []);
+        self::assertFalse($stringMapperUsed);
+        self::assertTrue($stdClassMapperUsed);
+        self::assertInstanceOf(ResponseInterface::class, $response);
     }
 }
