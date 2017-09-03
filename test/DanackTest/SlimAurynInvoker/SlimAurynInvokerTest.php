@@ -98,7 +98,6 @@ class SlimAurynInvokerTest extends BaseTestCase
 
         $callable = function () {};
 
-
         /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $response = new Response();

@@ -23,8 +23,11 @@ class SlimAurynInvoker
      * @param Injector $injector
      * @param array|null $resultMappers
      */
-    public function __construct(Injector $injector, array $resultMappers = null)
-    {
+    public function __construct(
+        Injector $injector,
+        array $resultMappers = null,
+        callable $setupFunction = null
+    ) {
         $this->injector = $injector;
         if ($resultMappers !== null) {
             $this->resultMappers = $resultMappers;
@@ -34,6 +37,13 @@ class SlimAurynInvoker
             $this->resultMappers = [
                 StubResponse::class => [StubResponseMapper::class, 'mapToPsr7Response']
             ];
+        }
+
+        if ($setupFunction === null) {
+            $this->setupFunction = [Util::class, 'setInjectorInfo'];
+        }
+        else {
+            $this->setupFunction = $setupFunction;
         }
     }
 
@@ -51,7 +61,8 @@ class SlimAurynInvoker
         ResponseInterface $response,
         array $routeArguments
     ) {
-        Util::setInjectorInfo($this->injector, $request, $response, $routeArguments);
+        $fn = $this->setupFunction;
+        $fn($this->injector, $request, $response, $routeArguments);
 
         // Execute the callable
         $result = $this->injector->execute($callable);

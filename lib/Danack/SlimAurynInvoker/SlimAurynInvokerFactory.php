@@ -21,10 +21,14 @@ class SlimAurynInvokerFactory
      * @param Injector $injector
      * @param array|null $resultMappers
      */
-    public function __construct(Injector $injector, array $resultMappers = null)
-    {
+    public function __construct(
+        Injector $injector,
+        array $resultMappers = null,
+        callable $setupFunction = null
+    ) {
         $this->injector = $injector;
         $this->resultMappers = $resultMappers;
+        $this->setupFunction = $setupFunction;
     }
 
     /**
@@ -33,6 +37,10 @@ class SlimAurynInvokerFactory
      */
     public function __invoke(Container $container)
     {
-        return new SlimAurynInvoker($this->injector, $this->resultMappers);
+        return new SlimAurynInvoker(
+            $this->injector,
+            $this->resultMappers,
+            $this->setupFunction
+        );
     }
 }
