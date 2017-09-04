@@ -32,10 +32,17 @@ class SlimAurynInvoker
         if ($resultMappers !== null) {
             $this->resultMappers = $resultMappers;
         }
-        // Default to using a single StubResponse mapper.
+        // Default to using: i) a StubResponse mapper, ii) if a PSR response is
+        // returned, just pass that back.
         else {
             $this->resultMappers = [
-                StubResponse::class => [StubResponseMapper::class, 'mapToPsr7Response']
+                StubResponse::class => [StubResponseMapper::class, 'mapToPsr7Response'],
+                ResponseInterface::class => function (
+                    ResponseInterface $controllerResult,
+                    ResponseInterface $originalResponse
+                ) {
+                    return $controllerResult;
+                }
             ];
         }
 
@@ -75,19 +82,13 @@ class SlimAurynInvoker
             }
         }
 
-        // if the result is a mutated PSR response object, just return that.
-        if ($result instanceof ResponseInterface) {
-            return $result;
-        }
-
         // Unknown result type, throw an exception
         $type = gettype($result);
         if ($type === "object") {
             $type = "object of type ". get_class($result);
         }
         $message = sprintf(
-            'Dispatched function returned [%s] which is not a".
-            "\Psr\Http\Message\ResponseInterface, or any type known to the resultMappers.',
+            'Dispatched function returned [%s] which is not a type known to the resultMappers.',
             $type
         );
         throw new SlimAurynInvokerException($message);

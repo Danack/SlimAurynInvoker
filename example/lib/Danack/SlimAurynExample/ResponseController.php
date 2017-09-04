@@ -5,7 +5,7 @@ namespace Danack\SlimAurynExample;
 use Danack\Response\HtmlResponse;
 use Twig_Environment as Twig;
 
-class HomePage
+class ResponseController
 {
     public function getHomePage(Twig $twig)
     {
