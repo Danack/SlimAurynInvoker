@@ -17,6 +17,18 @@ class SlimAurynInvokerFactory
     private $resultMappers;
 
     /**
+     * @var callable
+     */
+    private $setupFunction;
+
+    /**
+     * An array of string => callable exception handlers.
+     *
+     * @var array
+     */
+    private $exceptionHandlers;
+
+    /**
      * SlimAurynInvokerFactory constructor.
      * @param Injector $injector
      * @param array|null $resultMappers
@@ -24,11 +36,13 @@ class SlimAurynInvokerFactory
     public function __construct(
         Injector $injector,
         array $resultMappers = null,
-        callable $setupFunction = null
+        callable $setupFunction = null,
+        array $exceptionHandlers = null
     ) {
         $this->injector = $injector;
         $this->resultMappers = $resultMappers;
         $this->setupFunction = $setupFunction;
+        $this->exceptionHandlers = $exceptionHandlers;
     }
 
     /**
@@ -40,7 +54,8 @@ class SlimAurynInvokerFactory
         return new SlimAurynInvoker(
             $this->injector,
             $this->resultMappers,
-            $this->setupFunction
+            $this->setupFunction,
+            $this->exceptionHandlers
         );
     }
 }

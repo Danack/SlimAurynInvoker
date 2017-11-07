@@ -114,7 +114,7 @@ class SlimAurynInvokerTest extends BaseTestCase
 
 
     /**
-     * Test that a callable that returns an expected object type
+     * Test that a callable that returns an unknown object type
      * throws an exception.
      */
     public function testBadCallableReturningObject()
@@ -194,9 +194,110 @@ class SlimAurynInvokerTest extends BaseTestCase
         /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
         $requestMock = $this->createMock(ServerRequestInterface::class);
         $response = new Response();
-        $response = $invoker->__invoke($returnsAStdClass, $requestMock, $response, []);
+        $returnedResponse = $invoker->__invoke($returnsAStdClass, $requestMock, $response, []);
         self::assertFalse($stringMapperUsed);
         self::assertTrue($stdClassMapperUsed);
-        self::assertInstanceOf(ResponseInterface::class, $response);
+        self::assertInstanceOf(ResponseInterface::class, $returnedResponse);
     }
+
+    /**
+     * Test that a callable that throws a specific exception type, has
+     * the specific exception handler called
+     */
+    public function testExceptionCatchingCallsCorrectCallable()
+    {
+        $stringMapperUsed = false;
+        $stringToResponseMapper = function(string $value, ResponseInterface $response) use (&$stringMapperUsed) {
+            $response = $response->withStatus(123);
+            $stringMapperUsed = true;
+            return $response;
+        };
+
+        $exceptionToStringCalled = false;
+        $testExceptionToStringCallable = function (\DanackTest\TestException $te) use (&$exceptionToStringCalled) {
+            $exceptionToStringCalled = true;
+            return $te->getMessage();
+        };
+
+        $injector = new Injector();
+        $invoker = new SlimAurynInvoker(
+            $injector,
+            ['string' => $stringToResponseMapper,],
+            null,
+            [\DanackTest\TestException::class => $testExceptionToStringCallable]
+        );
+
+        $testString = 'testing correct handler called';
+
+        $callable = function () use ($testString) {
+            throw new \DanackTest\TestException($testString);
+        };
+
+        /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $response = new Response();
+
+        $returnedResponse = $invoker(
+            $callable,
+            $requestMock,
+            $response,
+            []
+        );
+
+        self::assertTrue($stringMapperUsed);
+        self::assertTrue($exceptionToStringCalled);
+        self::assertInstanceOf(ResponseInterface::class, $returnedResponse);
+        self::assertEquals(123, $returnedResponse->getStatusCode());
+    }
+
+
+    /**
+     * Test that a callable that throws a generic exception type, doesn't
+     * have an inappropriate exception handler called
+     */
+    public function testExceptionCatchingFallback()
+    {
+
+        $exceptionToStringCalled = false;
+        $testExceptionToStringCallable = function (\DanackTest\TestException $te) use (&$exceptionToStringCalled) {
+            $exceptionToStringCalled = true;
+            return $te->getMessage();
+        };
+
+        $injector = new Injector();
+        $invoker = new SlimAurynInvoker(
+            $injector,
+            [],
+            null,
+            [\DanackTest\TestException::class => $testExceptionToStringCallable]
+        );
+
+        $testString = 'testing correct handler called';
+
+        $callable = function () use ($testString) {
+            throw new \Exception($testString);
+        };
+
+
+        /** @var $requestMock \Psr\Http\Message\ServerRequestInterface */
+        $requestMock = $this->createMock(ServerRequestInterface::class);
+        $response = new Response();
+
+        try {
+            $invoker(
+                $callable,
+                $requestMock,
+                $response,
+                []
+            );
+            $this->fail("This code is not meant to be reached");
+        }
+        catch (\Exception $e) {
+            $this->assertEquals($testString, $e->getMessage());
+        }
+
+        self::assertFalse($exceptionToStringCalled);
+
+    }
+
 }
