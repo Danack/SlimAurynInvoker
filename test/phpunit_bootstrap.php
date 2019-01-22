@@ -2,4 +2,4 @@
 
 include_once __DIR__ . "/../vendor/autoload.php";
 
-new \DanackTest\BaseTestCase();
+require __DIR__ . "/fixtures.php";
