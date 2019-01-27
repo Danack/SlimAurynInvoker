@@ -1,19 +1,18 @@
 <?php
 
+namespace Example\Response;
+
 namespace SlimAuryn\Response;
 
-class HtmlNoCacheResponse implements StubResponse
+class RSSResponse implements StubResponse
 {
     private $body;
 
     private $headers = [];
 
-    /** @var int */
-    private $status;
-
     public function getStatus() : int
     {
-        return $this->status;
+        return 200;
     }
 
     public function getHeaders() : array
@@ -22,20 +21,18 @@ class HtmlNoCacheResponse implements StubResponse
     }
 
     /**
-     * HtmlResponse constructor.
-     * @param string $html
+     * XMLResponse constructor.
+     * @param string $xml
      * @param array $headers
      */
-    public function __construct(string $html, array $headers = [], int $status = 200)
+    public function __construct(string $xml, array $headers = [])
     {
         $standardHeaders = [
-            'Content-Type' => 'text/html',
-            'Cache-Control' => 'no-cache, no-store',
+            'Content-Type' => 'application/rss+xml; charset=utf-8'
         ];
 
         $this->headers = array_merge($standardHeaders, $headers);
-        $this->body = $html;
-        $this->status = $status;
+        $this->body = $xml;
     }
 
     public function getBody() : string
