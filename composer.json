@@ -11,7 +11,7 @@
         }
     ],
     "require": {
-        "php": ">=7.0.0",
+        "php": ">=7.1.0",
         "rdlowrey/auryn": "^1.4.2"
     },
     "require-dev": {
@@ -29,14 +29,13 @@
     },
     "autoload": {
         "psr-0": {
-          "Danack\\SlimAurynInvoker\\": "lib/",
-          "Danack\\Response\\": "lib/"
+          "SlimAuryn\\": "lib/"
         }
     },
     "autoload-dev": {
         "psr-0": {
-            "DanackTest\\": "test/",
-            "Danack\\SlimAurynExample\\": "example/lib/"
+            "SlimAurynTest\\": "test/",
+            "SlimAurynExample\\": "example/lib/"
         }
     }
 }
