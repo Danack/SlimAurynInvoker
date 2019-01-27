@@ -17,7 +17,7 @@ class IntegrationTest extends BaseTestCase
     public function testMiddleWareIsDispatchedCorrectly()
     {
         [$statusCode, $body, $headers] = fetchUri(
-            'http://local.slimauryn.example.com/test_middleware/middleware_is_added',
+            'http://local.slimauryn.basereality.com/test_middleware/middleware_is_added',
             'GET'
         );
 
@@ -30,7 +30,7 @@ class IntegrationTest extends BaseTestCase
     public function testMiddleWareIsDispatchedForRouteNotSetFor()
     {
         [$statusCode, $body, $headers] = fetchUri(
-            'http://local.slimauryn.example.com/test_middleware/middleware_not_added',
+            'http://local.slimauryn.basereality.com/test_middleware/middleware_not_added',
             'GET'
         );
 
@@ -41,7 +41,7 @@ class IntegrationTest extends BaseTestCase
     public function testMiddleWareIsDispatchedInCorrectOrder()
     {
         [$statusCode, $body, $headers] = fetchUri(
-            'http://local.slimauryn.example.com/test_middleware/middleware_correct_order',
+            'http://local.slimauryn.basereality.com/test_middleware/middleware_correct_order',
             'GET'
         );
 
@@ -64,7 +64,7 @@ class IntegrationTest extends BaseTestCase
     public function testAdditionDepdendencyInjectionIsDoneCorrectly($path, $message)
     {
         [$statusCode, $body, $headers] = fetchUri(
-            'http://local.slimauryn.example.com' . $path,
+            'http://local.slimauryn.basereality.com' . $path,
             'GET'
         );
 

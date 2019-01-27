@@ -8,6 +8,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 class SlimAurynInvoker
 {
+    const SETUP_ARGUMENT_NAME = 'setupCallable';
+
     /** @var Injector The injector to use for execution */
     private $injector;
 
@@ -40,7 +42,7 @@ class SlimAurynInvoker
         // If the route has a setup callable, call that first.
         $setupCallable = null;
         if (($attribute = $request->getAttribute('route')) !== null) {
-            $setupCallable = $attribute->getArgument('setupCallable', null);
+            $setupCallable = $attribute->getArgument(self::SETUP_ARGUMENT_NAME, null);
 
             if ($setupCallable !== null) {
                 $this->injector->execute($setupCallable);
