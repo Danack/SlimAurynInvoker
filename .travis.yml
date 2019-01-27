@@ -13,6 +13,7 @@ before_install:
   # Stop the postgres instance travis sets up automatically
   # Create a loopback address
   - sudo ip addr add 10.254.254.254/32 dev lo
+  - echo "10.254.254.254 local.slimauryn.example.com" >> /etc/hosts
 
 install:
   # Start the docker stuff
