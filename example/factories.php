@@ -17,7 +17,6 @@ function createSlimAurynInvokerFactory(
     );
 }
 
-
 function createExceptionMiddleware()
 {
     return new SlimAuryn\ExceptionMiddleware(

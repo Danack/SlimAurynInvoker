@@ -1,12 +1,11 @@
 <?php
 
-use AurynConfig\InjectionParams;
+use SlimAuryn\InjectionParams;
 
 function injectionParams()
 {
     // These classes will only be created once by the injector.
     $shares = [
-//        \SlimSession\Helper::class,
         \Twig_Environment::class,
         \Auryn\Injector::class,
         \SlimAuryn\RouteMiddlewares::class,

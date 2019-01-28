@@ -3,6 +3,7 @@
 namespace SlimAurynTest;
 
 use Auryn\Injector;
+use Auryn\InjectorException;
 use SlimAurynTest\BaseTestCase;
 use SlimAuryn\RouteParams;
 use SlimAuryn\RouteParamsException;
@@ -116,5 +117,17 @@ class InjectionParamsTest extends BaseTestCase
         $injectionParams->addToInjector($injector);
         $obj = $injector->make(StringValue::class);
         $this->assertSame($testString, $obj->getString());
+    }
+
+    public function testBadSharedObjectsGivesException()
+    {
+        $sharedObjects = [0 => new \StdClass];
+
+        $injectionParams = new InjectionParams();
+
+        $this->expectException(InjectorException::class);
+        $this->expectExceptionMessage('sharedObjects must be a string indexed array');
+
+        $injectionParams->mergeSharedObjects($sharedObjects);
     }
 }

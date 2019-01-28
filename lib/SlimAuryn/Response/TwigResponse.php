@@ -15,16 +15,19 @@ class TwigResponse
     /** @var int */
     private $status;
 
-    /**
-     * TwigResponse constructor.
-     * @param string $templateName
-     * @param array $parameters
-     */
-    public function __construct(string $templateName, array $parameters = [], int $status = 200)
-    {
+    /** @var array */
+    private $headers;
+
+    public function __construct(
+        string $templateName,
+        array $parameters = [],
+        int $status = 200,
+        array $headers = []
+    ) {
         $this->templateName = $templateName;
         $this->parameters = $parameters;
         $this->status = $status;
+        $this->headers = $headers;
     }
 
     /**
@@ -49,5 +52,13 @@ class TwigResponse
     public function getStatus(): int
     {
         return $this->status;
+    }
+
+    /**
+     * @return array
+     */
+    public function getHeaders(): array
+    {
+        return $this->headers;
     }
 }

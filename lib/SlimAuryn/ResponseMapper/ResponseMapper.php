@@ -1,6 +1,6 @@
 <?php
 
-namespace SlimAuryn;
+namespace SlimAuryn\ResponseMapper;
 
 use Psr\Http\Message\ResponseInterface;
 use SlimAuryn\Response\StubResponse;
@@ -18,8 +18,10 @@ class ResponseMapper
      * @param ResponseInterface $response
      * @return ResponseInterface
      */
-    public static function mapStubResponseToPsr7(StubResponse $builtResponse, ResponseInterface $response)
-    {
+    public static function mapStubResponseToPsr7(
+        StubResponse $builtResponse,
+        ResponseInterface $response
+    ) {
         $response = $response->withStatus($builtResponse->getStatus());
         foreach ($builtResponse->getHeaders() as $key => $value) {
             /** @var \Psr\Http\Message\ResponseInterface $response */

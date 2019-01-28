@@ -38,6 +38,8 @@ class SlimAurynMockTest extends BaseTestCase
         $mock->shouldReceive('defineParam')->withArgs(['paramName', 'value']);
 
         $injectionParams->addToInjector($mock);
+
+        \Mockery::close();
     }
 
     public function testFromSharedObjects()
