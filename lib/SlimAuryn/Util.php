@@ -27,6 +27,11 @@ class Util
             }
         }
 
+        // Allow PSR responses to just be passed back.
+        if ($result instanceof ResponseInterface) {
+            return $result;
+        }
+
         // Unknown result type, throw an exception
         $type = gettype($result);
         if ($type === "object") {

@@ -17,13 +17,11 @@ use Slim\Http\Headers;
 
 class ExceptionMiddlewareTest extends BaseTestCase
 {
-
     public function testCallableCalledProperly()
     {
         $nextFn = function (Request $request, ResponseInterface $response) {
             return 'Test output';
         };
-
 
         $responseString = $this->performRequest(
             $nextFn,
@@ -34,6 +32,38 @@ class ExceptionMiddlewareTest extends BaseTestCase
 
         $this->assertEquals('Test output', $responseString);
     }
+
+
+    public function testParseErrorMappedProperly()
+    {
+        $nextFn = function (Request $request, ResponseInterface $response) {
+            return eval('return $x + 4a');
+        };
+
+        $message = null;
+
+        $handleException = function (\ParseError $exception, ResponseInterface $response) use (&$message) {
+            $message = $exception->getMessage();
+
+            $response = $response->withStatus(503);
+
+            return $response;
+        };
+
+        $response = $this->performRequest(
+            $nextFn,
+            [],
+            [\ParseError::class => $handleException]
+        );
+
+        $this->assertSame(
+            "syntax error, unexpected 'a' (T_STRING), expecting ';'",
+            $message
+        );
+        $this->assertSame(503, $response->getStatusCode());
+    }
+
+
 
     public function testExceptionResultConvertedToResponse()
     {
@@ -78,7 +108,6 @@ class ExceptionMiddlewareTest extends BaseTestCase
 
     public function testExceptionUnmappedEscapes()
     {
-
         $nextFn = function (Request $request, ResponseInterface $response) {
             throw new UnmappedException("This is an unmapped exception.");
         };

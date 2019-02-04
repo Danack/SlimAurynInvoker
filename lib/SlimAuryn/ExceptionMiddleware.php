@@ -36,7 +36,7 @@ class ExceptionMiddleware
 
             return $response;
         }
-        catch (\Exception $e) {
+        catch (\Throwable $e) {
             // Find if there is an exception handler for this type of exception
             foreach ($this->exceptionMappers as $type => $exceptionCallable) {
                 if ($e instanceof $type) {
