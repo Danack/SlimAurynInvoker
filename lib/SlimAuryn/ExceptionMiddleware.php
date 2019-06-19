@@ -40,7 +40,7 @@ class ExceptionMiddleware
             // Find if there is an exception handler for this type of exception
             foreach ($this->exceptionMappers as $type => $exceptionCallable) {
                 if ($e instanceof $type) {
-                    $exceptionResult = $exceptionCallable($e, $response);
+                    $exceptionResult = $exceptionCallable($e, $response, $request);
 
                     return Util::mapResult(
                         $exceptionResult,

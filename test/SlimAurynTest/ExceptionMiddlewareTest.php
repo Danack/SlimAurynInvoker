@@ -137,10 +137,69 @@ class ExceptionMiddlewareTest extends BaseTestCase
         );
     }
 
+    public function testAllThreeParametersArePassedCorrectly()
+    {
+        $requestUsed = null;
+        $responseUsed = null;
+
+        $fn = function (
+            MappedException $mappedException,
+            $response,
+            $request
+        ) use (&$requestUsed, &$responseUsed) {
+            $requestUsed = $request;
+            $responseUsed = $response;
+            return $mappedException->getMessage();
+        };
+
+        $exceptionHandlers = [
+            MappedException::class => $fn
+        ];
+
+        $response = new Response();
+        $request = $this->createRequest();
+
+        $convertStringToHtmlResponseFn = function (string $result, ResponseInterface $response) {
+            $response = $response->withHeader('Content-Type', 'text/html');
+            $response->getBody()->write($result . " That was mapped to html");
+            return $response;
+        };
+
+        $resultMappers = [
+            'string' => $convertStringToHtmlResponseFn
+        ];
+
+        $exceptionMiddleware = new ExceptionMiddleware(
+            $exceptionHandlers,
+            $resultMappers
+        );
+
+        $nextFn = function (Request $request, ResponseInterface $response) {
+            throw new MappedException("This is a mapped exception.");
+        };
+
+        $exceptionMiddleware->__invoke($request, $response, $nextFn);
+
+        $this->assertSame($request, $requestUsed);
+        $this->assertSame($response, $responseUsed);
+    }
+
     public function performRequest($nextFn, $resultMappers, $exceptionHandlers)
     {
         $response = new Response();
 
+        $request = $this->createRequest();
+
+        $exceptionMiddleware = new ExceptionMiddleware(
+            $exceptionHandlers,
+            $resultMappers
+        );
+
+        return $exceptionMiddleware->__invoke($request, $response, $nextFn);
+    }
+
+    private function createRequest()
+    {
         $headers = [];
         $bodyContent = '';
         $cookies = [];
@@ -154,11 +213,6 @@ class ExceptionMiddlewareTest extends BaseTestCase
         $method = 'GET';
         $request = new Request($method, $uri, $headers, $cookies, $serverParams, $body);
 
-        $exceptionMiddleware = new ExceptionMiddleware(
-            $exceptionHandlers,
-            $resultMappers
-        );
-
-        return $exceptionMiddleware->__invoke($request, $response, $nextFn);
+        return $request;
     }
 }

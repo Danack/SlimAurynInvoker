@@ -2,6 +2,6 @@
 
 set -e
 
-docker-compose exec -T php_fpm sh -c "sh runAllTests.sh"
+docker-compose exec -T php_fpm_debug sh -c "sh runAllTests.sh"
 
 

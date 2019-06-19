@@ -22,7 +22,10 @@ class ResponseMapper
         StubResponse $builtResponse,
         ResponseInterface $response
     ) {
-        $response = $response->withStatus($builtResponse->getStatus());
+        $status = $builtResponse->getStatus();
+        $reasonPhrase = static::getReasonPhrase($status);
+
+        $response = $response->withStatus($builtResponse->getStatus(), $reasonPhrase);
         foreach ($builtResponse->getHeaders() as $key => $value) {
             /** @var \Psr\Http\Message\ResponseInterface $response */
             $response = $response->withHeader($key, $value);
@@ -30,6 +33,21 @@ class ResponseMapper
         $response->getBody()->write($builtResponse->getBody());
 
         return $response;
+    }
+
+    public static function getReasonPhrase(int $status)
+    {
+        $customPhrases = [
+            420 => 'Enhance your calm',
+            512 => 'Server known limitation',
+        ];
+
+        if (array_key_exists($status, $customPhrases) === true) {
+            return $customPhrases[$status];
+        }
+
+
+        return '';
     }
 
     /**
