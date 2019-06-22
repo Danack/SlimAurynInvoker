@@ -11,11 +11,11 @@ class JsonResponse implements StubResponse
 
     private $headers = [];
 
-    private $statusCode;
+    private $status;
 
     public function getStatus() : int
     {
-        return $this->statusCode;
+        return $this->status;
     }
 
     public function getHeaders() : array
@@ -27,17 +27,17 @@ class JsonResponse implements StubResponse
      * JsonResponse constructor.
      * @param mixed $data
      * @param array $headers
-     * @param int $statusCode
+     * @param int $status
      * @throws \SlimAuryn\Response\InvalidDataException
      */
-    public function __construct($data, array $headers = [], int $statusCode = 200)
+    public function __construct($data, array $headers = [], int $status = 200)
     {
         $standardHeaders = [
             'Content-Type' => 'application/json'
         ];
 
         $this->headers = array_merge($standardHeaders, $headers);
-        $this->statusCode = $statusCode;
+        $this->status = $status;
         $this->body = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
 
         if ($this->body === false) {

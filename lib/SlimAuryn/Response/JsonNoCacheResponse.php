@@ -6,7 +6,7 @@ use SlimAuryn\Response\StubResponse;
 
 class JsonNoCacheResponse implements StubResponse
 {
-    private $statusCode;
+    private $status;
 
     private $body;
 
@@ -14,7 +14,7 @@ class JsonNoCacheResponse implements StubResponse
 
     public function getStatus() : int
     {
-        return $this->statusCode;
+        return $this->status;
     }
 
     public function getHeaders() : array
@@ -28,18 +28,16 @@ class JsonNoCacheResponse implements StubResponse
      * @param array $headers
      * @throws InvalidDataException
      */
-    public function __construct($data, array $headers = [], int $statusCode = 200)
+    public function __construct($data, array $headers = [], int $status = 200)
     {
         $standardHeaders = [
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache, no-store',
         ];
 
+        $this->status = $status;
         $this->headers = array_merge($standardHeaders, $headers);
         $this->body = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-        // TODO - test for failure to json_encode
-        $this->statusCode = $statusCode;
-
         if ($this->body === false) {
             $message = sprintf(
                 "Failed to convert array to JSON with error %s:%s",

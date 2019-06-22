@@ -8,27 +8,32 @@ class RedirectResponse implements StubResponse
 {
     private $headers = [];
 
-    private $statusCode;
+    /** @var int */
+    private $status;
+
+    /** @var string */
+    private $redirectUri;
 
     /**
      * RedirectResponse constructor.
      * @param string $uri
-     * @param int $statusCode
+     * @param int $status
      * @param array $headers
      */
-    public function __construct(string $uri, int $statusCode = 302, array $headers = [])
+    public function __construct(string $uri, int $status = 302, array $headers = [])
     {
+        $this->redirectUri = $uri;
         $standardHeaders = [
             'Location' => $uri
         ];
 
         $this->headers = array_merge($standardHeaders, $headers);
-        $this->statusCode = $statusCode;
+        $this->status = $status;
     }
 
     public function getStatus() : int
     {
-        return $this->statusCode;
+        return $this->status;
     }
 
     public function getHeaders() : array
@@ -39,5 +44,13 @@ class RedirectResponse implements StubResponse
     public function getBody() : string
     {
         return "";
+    }
+
+    /**
+     * @return string
+     */
+    public function getRedirectUri(): string
+    {
+        return $this->redirectUri;
     }
 }

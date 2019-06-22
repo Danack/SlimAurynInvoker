@@ -8,7 +8,7 @@ class CsvDataResponse implements StubResponse
 {
     private $headers = [];
 
-    private $statusCode;
+    private $status;
 
     private $dataHeaders;
     private $dataRows;
@@ -17,7 +17,7 @@ class CsvDataResponse implements StubResponse
 
     public function getStatus() : int
     {
-        return $this->statusCode;
+        return $this->status;
     }
 
     public function getHeaders() : array
@@ -31,14 +31,14 @@ class CsvDataResponse implements StubResponse
      * @param array $dataRows
      * @param string $filename
      * @param array $headers
-     * @param int $statusCode
+     * @param int $status
      */
     public function __construct(
         array $dataRows,
         array $dataHeaders = null,
         string $filename = "file.csv",
         array $headers = [],
-        int $statusCode = 200
+        int $status = 200
     ) {
         $standardHeaders = [
             'Content-Type' => 'text/csv',
@@ -48,7 +48,7 @@ class CsvDataResponse implements StubResponse
         $this->headers = array_merge($standardHeaders, $headers);
         $this->dataHeaders = $dataHeaders;
         $this->dataRows = $dataRows;
-        $this->statusCode = $statusCode;
+        $this->status = $status;
 
         $this->body = self::strPutCsv($this->dataRows, $this->dataHeaders);
     }
