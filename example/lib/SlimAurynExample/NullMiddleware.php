@@ -16,8 +16,11 @@ class NullMiddleware
 {
     private $wasCalled = false;
 
-    public function __invoke(Request $request, ResponseInterface $response, $next)
-    {
+    public function __invoke(
+        Request $request,
+        ResponseInterface $response,
+        $next
+    ): ResponseInterface {
         $this->wasCalled = true;
 
         return $next($request, $response);

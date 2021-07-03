@@ -12,12 +12,12 @@ class SlimAurynInvokerFactory
     private $injector;
 
     /** @var RouteMiddlewares  */
-    private $routeMiddlewares;
+    private RouteMiddlewares $routeMiddlewares;
 
     /** @var array A set of callables that can convert from the type
      * returned by a controller, to a PSR 7 response type
      */
-    private $resultMappers;
+    private array $resultMappers;
 
     /**
      * SlimAurynInvokerFactory constructor.

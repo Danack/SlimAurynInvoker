@@ -15,10 +15,10 @@ use Psr\Http\Message\ServerRequestInterface;
 class Util
 {
     public static function mapResult(
-        $result,
+        mixed $result,
         ResponseInterface $response,
         array $resultMappers
-    ) {
+    ): ResponseInterface {
         // Test each of the result mapper, and use an appropriate one.
         foreach ($resultMappers as $type => $mapCallable) {
             if ((is_object($result) && $result instanceof $type) ||
@@ -49,7 +49,7 @@ class Util
         ServerRequestInterface $request,
         ResponseInterface $response,
         array $routeArguments
-    ) {
+    ): void {
         $injector->alias(ServerRequestInterface::class, get_class($request));
         $injector->share($request);
         $injector->alias(ResponseInterface::class, get_class($response));

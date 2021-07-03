@@ -15,7 +15,7 @@ use SlimAurynTest\BaseTestCase;
 
 class SlimAurynInvoker_SetInjectorInfoTest extends BaseTestCase
 {
-    public function testSetInjectorInfo()
+    public function testSetInjectorInfo(): void
     {
         $injector = new Injector();
 

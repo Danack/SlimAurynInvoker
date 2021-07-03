@@ -7,7 +7,7 @@ use Twig_Environment as Twig;
 
 class ResponseController
 {
-    public function getHomePage(Twig $twig)
+    public function getHomePage(Twig $twig): HtmlResponse
     {
         $html = $twig->render('homepage.html');
 

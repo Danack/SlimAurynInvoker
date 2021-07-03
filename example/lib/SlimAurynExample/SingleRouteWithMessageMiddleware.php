@@ -35,8 +35,11 @@ class SingleRouteWithMessageMiddleware
         return $response->withAddedHeader(self::HEADER_NAME, $this->message);
     }
 
-    public function __invoke(Request $request, ResponseInterface $response, $next)
-    {
+    public function __invoke(
+        Request $request,
+        ResponseInterface $response,
+        $next
+    ): ResponseInterface {
         $response = $next($request, $response);
 
         /** @var ResponseInterface $response */

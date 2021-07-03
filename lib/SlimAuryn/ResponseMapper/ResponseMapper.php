@@ -35,7 +35,7 @@ class ResponseMapper
         return $response;
     }
 
-    public static function getReasonPhrase(int $status)
+    public static function getReasonPhrase(int $status): string
     {
         $customPhrases = [
             420 => 'Enhance your calm',

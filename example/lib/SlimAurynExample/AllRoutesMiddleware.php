@@ -12,8 +12,11 @@ use Psr\Http\Message\ServerRequestInterface as Request;
  */
 class AllRoutesMiddleware
 {
-    public function __invoke(Request $request, ResponseInterface $response, $next)
-    {
+    public function __invoke(
+        Request $request,
+        ResponseInterface $response,
+        $next
+    ): ResponseInterface {
         $response = $next($request, $response);
 
         /** @var ResponseInterface $response */

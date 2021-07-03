@@ -14,7 +14,7 @@ use SlimAurynExample\SingleRouteWithMessageMiddleware;
 /**
  * @return \Monolog\Logger
  */
-function createLogger()
+function createLogger(): \Monolog\Logger
 {
     $log = new \Monolog\Logger('logger');
     $directory = __DIR__ . "/./var";
@@ -27,7 +27,7 @@ function createLogger()
 /**
  * @return Twig_Environment
  */
-function createTwigForSite()
+function createTwigForSite(): Twig_Environment
 {
     $templatePaths = [
         __DIR__ . '/./templates' // shared templates.
@@ -54,7 +54,7 @@ function createTwigForSite()
  * @return bool
  * @throws Exception
  */
-function saneErrorHandler($errorNumber, $errorMessage, $errorFile, $errorLine)
+function saneErrorHandler($errorNumber, $errorMessage, $errorFile, $errorLine): bool
 {
     if (error_reporting() === 0) {
         // Error reporting has been silenced
@@ -73,7 +73,7 @@ function saneErrorHandler($errorNumber, $errorMessage, $errorFile, $errorLine)
 }
 
 
-function fetchUri($uri, $method, $queryParams = [], $body = null)
+function fetchUri($uri, $method, $queryParams = [], $body = null): array
 {
     $query = http_build_query($queryParams);
     $curl = curl_init();
@@ -100,7 +100,7 @@ function fetchUri($uri, $method, $queryParams = [], $body = null)
     return [$statusCode, $body, $headers];
 }
 
-function getExceptionMappers()
+function getExceptionMappers(): array
 {
     $exceptionMappers = [
     ];
@@ -110,7 +110,7 @@ function getExceptionMappers()
 
 
 // Define a function that writes a string into the response object.
-function convertStringToHtmlResponse(string $result, ResponseInterface $response)
+function convertStringToHtmlResponse(string $result, ResponseInterface $response): ResponseInterface
 {
     $response = $response->withHeader('Content-Type', 'text/html');
     $response->getBody()->write($result);
@@ -120,13 +120,15 @@ function convertStringToHtmlResponse(string $result, ResponseInterface $response
 function psr7ResponsePassThrough(
     ResponseInterface $controllerResult,
     ResponseInterface $originalResponse
-) {
+): ResponseInterface {
     return $controllerResult;
 }
 
 
-function mapToPsr7Response(StubResponse $builtResponse, ResponseInterface $response)
-{
+function mapToPsr7Response(
+    StubResponse $builtResponse,
+    ResponseInterface $response
+): ResponseInterface {
     $response = $response->withStatus($builtResponse->getStatus());
     foreach ($builtResponse->getHeaders() as $key => $value) {
         /** @var \Psr\Http\Message\ResponseInterface $response */

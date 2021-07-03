@@ -25,7 +25,7 @@ class TwigResponseMapper
     public function __invoke(
         TwigResponse $twigResponse,
         ResponseInterface $originalResponse
-    ) : ResponseInterface {
+    ): ResponseInterface {
         $html = $this->twig->render(
             $twigResponse->getTemplateName(),
             $twigResponse->getParameters()
@@ -43,7 +43,7 @@ class TwigResponseMapper
         return $response;
     }
 
-    public function getCustomReasonPhrase(int $status)
+    public function getCustomReasonPhrase(int $status): string
     {
         $customStatusReasons = [
             420 => 'Enhance Your Calm',
