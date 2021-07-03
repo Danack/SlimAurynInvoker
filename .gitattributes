@@ -7,3 +7,6 @@
 /.travis.yml export-ignore
 .travis.yml export-ignore
 
+/composer.phar export-ignore
+/phpstan.neon export-ignore
+/phpstan.phar export-ignore

@@ -1,5 +1,7 @@
 <?php
 
+use Slim\CallableResolver;
+use SlimAuryn\AurynCallableResolver;
 use SlimAuryn\SlimAurynInvokerFactory;
 use SlimAurynExample\AllRoutesMiddleware;
 use SlimAuryn\ExceptionMiddleware;
@@ -27,6 +29,14 @@ $injector->share($injector);
 // for the 'foundHandler'.
 $container = new \Slim\Container;
 $container['foundHandler'] = $injector->make(SlimAurynInvokerFactory::class);
+
+$callableResolver = new AurynCallableResolver(
+    new CallableResolver($container),
+    $container
+);
+
+$container['callableResolver'] = $callableResolver;
+
 $app = new \Slim\App($container);
 
 // Configure any middlewares that should be applied to all routes here.
