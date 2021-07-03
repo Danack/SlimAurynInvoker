@@ -1,36 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-
-<phpunit bootstrap="phpunit_bootstrap.php">
-    <php>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="phpunit_bootstrap.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+  <coverage>
+    <include>
+      <directory>../lib/SlimAuryn</directory>
+    </include>
+    <report>
+      <html outputDirectory="../tmp/coverage" lowUpperBound="35" highLowerBound="70"/>
+      <text outputFile="php://stdout"/>
+    </report>
+  </coverage>
+  <php>
     </php>
-
-    <testsuites>
-        <testsuite name="Dijon Test Suite">
-            <directory>../test/</directory>
-            <exclude>BaseTestCase.php</exclude> <!-- This doens't seem to work-->
-        </testsuite>
-    </testsuites>
-
-    <filter>
-        <whitelist>
-            <directory>../lib/SlimAuryn</directory>
-        </whitelist>
-    </filter>
-
-    <!--<listeners>-->
-        <!--<listener class="Mockery\Adapter\Phpunit\TestListener"/>-->
-    <!--</listeners>-->
-
-    <logging>
-        <log
-                type="coverage-text"
-                target="php://stdout"
-                lowUpperBound="35"
-                highLowerBound="75"
-        />
-        <log type="coverage-html" target="../tmp/coverage"
-              lowUpperBound="35" highLowerBound="70"/>
-    </logging>
-
+  <testsuites>
+    <testsuite name="Dijon Test Suite">
+      <directory>../test/</directory>
+      <exclude>BaseTestCase.php</exclude>
+      <!-- This doens't seem to work-->
+    </testsuite>
+  </testsuites>
+  <!--<listeners>-->
+  <!--<listener class="Mockery\Adapter\Phpunit\TestListener"/>-->
+  <!--</listeners>-->
+  <logging/>
 </phpunit>

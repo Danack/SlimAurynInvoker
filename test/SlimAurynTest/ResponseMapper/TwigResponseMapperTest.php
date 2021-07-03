@@ -41,7 +41,7 @@ class TwigResponseMapperTest extends BaseTestCase
         $response->getBody()->rewind();
         $bodyString = $response->getBody()->getContents();
 
-        $this->assertContains('foo was set to bar', $bodyString);
+        $this->assertStringContainsString('foo was set to bar', $bodyString);
 
         $this->assertTrue($response->hasHeader('x-foo'));
         $this->assertSame('bar', $response->getHeaderLine('x-foo'));

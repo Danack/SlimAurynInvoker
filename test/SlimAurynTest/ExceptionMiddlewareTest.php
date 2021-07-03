@@ -56,10 +56,19 @@ class ExceptionMiddlewareTest extends BaseTestCase
             [\ParseError::class => $handleException]
         );
 
-        $this->assertSame(
-            "syntax error, unexpected 'a' (T_STRING), expecting ';'",
-            $message
-        );
+        if (PHP_VERSION_ID > 80000) {
+            $this->assertSame(
+                'syntax error, unexpected identifier "a", expecting ";"',
+                $message
+            );
+        }
+        else {
+            $this->assertSame(
+                "syntax error, unexpected 'a' (T_STRING), expecting ';'",
+                $message
+            );
+        }
+
         $this->assertSame(503, $response->getStatusCode());
     }
 
