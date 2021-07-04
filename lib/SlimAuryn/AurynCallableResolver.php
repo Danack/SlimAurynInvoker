@@ -44,6 +44,16 @@ class AurynCallableResolver implements CallableResolverInterface
     {
         $resolved = $toResolve;
 
+        if (is_array($resolved) === true) {
+            $class = $resolved[0];
+            $method = $resolved[1];
+            if (class_exists($class) === true) {
+                if (method_exists($class, $method) === true) {
+                    return $resolved;
+                }
+            }
+        }
+
         if (!is_callable($toResolve) && is_string($toResolve)) {
             // check for slim callable as "class:method"
             $callablePattern = '!^([^\:]+)\:{1,2}([a-zA-Z_\x7f-\xff][a-zA-Z0-9_\x7f-\xff]*)$!';
